@@ -54,27 +54,28 @@ bin/checkout GR1 SR1 GR1 GR1 CF1
 ### Architecture (flow diagram)
 ```mermaid
 flowchart TD
-  CLI[Client code / CLI] --> Scan[Checkout.scan(code)]
-  Scan --> Exists{Catalog.exists?(code)?}
-  Exists -- No --> Unknown[unknown_sku: error/skip]
-  Exists -- Yes --> Add[items[code] += 1]
+  CLI[Client/CLI] --> S[scan]
+  S --> Q{catalog has code?}
+  Q -- No --> U[unknown_sku]
+  Q -- Yes --> A[items[code] += 1]
 
-  CLI --> Breakdown[Checkout.breakdown]
-  Breakdown --> Subtotal[compute_subtotal]
-  Subtotal --> SubExpr[sum price(SKU) * qty]
-  Breakdown --> Disc[compute_discounts]
-  Disc --> Sort[sort rules by priority]
-  Sort --> BOGO[BuyOneGetOneFree]
-  Sort --> Bulk[BulkPriceOverride]
-  Sort --> Group[GroupPriceFraction]
-  BOGO --> List[discounts << {label, code, amount}]
-  Bulk --> List
-  Group --> List
+  CLI --> B[breakdown]
+  B --> ST[subtotal]
+  ST --> ST1[sum price * qty]
 
-  SubExpr --> SubtotalOut[subtotal]
-  List --> Sum[sum(discount_cents)]
-  SubtotalOut --> TotalExpr[total = subtotal - sum]
-  TotalExpr --> Result[return {subtotal, discounts, total}]
+  B --> D[compute discounts]
+  D --> P[sort rules by priority]
+  P --> R1[BOGO]
+  P --> R2[Bulk]
+  P --> R3[Group]
+  R1 --> L[discounts list]
+  R2 --> L
+  R3 --> L
+
+  L --> SUM[sum(discount_cents)]
+  ST1 --> ST_OUT[subtotal]
+  ST_OUT --> T[total = subtotal - sum]
+  T --> OUT[{subtotal, discounts, total}]
 ```
 
 #### ASCII fallback
