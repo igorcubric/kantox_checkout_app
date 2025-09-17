@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
+require 'checkout'
+require 'catalog'
+
+rules = [
+  Pricing::BuyOneGetOneFree.new(code: 'GR1', priority: 50),
+  Pricing::BulkPriceOverride.new(code: 'SR1', threshold: 3, new_unit_price_cents: 450, priority: 60),
+  Pricing::GroupPriceFraction.new(code: 'CF1', threshold: 3, numerator: 2, denominator: 3, priority: 70)
+]
+
+codes = ARGV
+abort('Usage: bin/checkout <SKU1> <SKU2> ...') if codes.empty?
+
+co = Checkout.new(pricing_rules: rules, catalog: Catalog.default, unknown_sku: :error)
+codes.each { |c| co.scan(c) }
+
+bd = co.breakdown
+puts "Subtotal: #{bd[:subtotal]}"
+if bd[:discounts].empty?
+  puts 'Discounts: none'
+else
+  lines = bd[:discounts].map { |d| "  - #{d[:label]} (#{d[:code]}): -#{d[:amount]}" }.join("\n")
+  puts "Discounts:\n#{lines}"
+end
+puts "Total:    #{bd[:total]}"

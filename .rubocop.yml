@@ -1,0 +1,19 @@
+plugins:
+  - rubocop-rspec
+
+AllCops:
+  TargetRubyVersion: 3.2
+  NewCops: enable
+  Exclude:
+    - 'spec/spec_helper.rb'
+
+Layout/LineLength:
+  Max: 110
+
+Metrics/MethodLength:
+  Max: 20
+
+Metrics/BlockLength:
+  AllowedMethods:
+    - describe
+    - context
