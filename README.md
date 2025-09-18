@@ -100,9 +100,6 @@ Client/CLI
 bundle exec rspec spec/pricing_rules_property_spec.rb
 ```
 
-## Mutation testing
-Mutant checks the strength of tests by mutating the code.
-
 ### Locally
 Public repo:
 ```bash
