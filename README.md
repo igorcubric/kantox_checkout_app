@@ -100,28 +100,6 @@ Client/CLI
 bundle exec rspec spec/pricing_rules_property_spec.rb
 ```
 
-### Locally
-Public repo:
-```bash
-bundle exec mutant run --usage opensource --use rspec 'Money*' 'Pricing*'
-```
-Private repo:
-```bash
-bundle exec mutant run --usage commercial --use rspec 'Money*' 'Pricing*'
-```
-
-### Config (`mutant.yml`)
-```yaml
-usage: opensource
-integration: rspec
-includes: [lib]
-requires: [mutant-rspec]
-matcher:
-  subjects:
-    - Money*
-    - Pricing*
-```
-
 ## Structure
 ```
 lib/
