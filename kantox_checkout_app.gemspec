@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.description = 'Pure Ruby checkout with composable pricing rules and CLI'
   s.authors     = ['Igor Cubric']
   s.email       = ['cubricigor@gmail.com']
-  s.files       = Dir['lib/**/*', 'README.md', 'LICENSE']
+  s.files       = Dir['lib/**/*.rb', 'README.md', 'LICENSE']
   s.homepage    = 'https://github.com/igorcubric/kantox_checkout_app'
   s.license     = 'MIT'
   s.required_ruby_version = '>= 3.2.0'
