@@ -5,8 +5,6 @@ source 'https://rubygems.org'
 ruby '>= 3.2.0'
 
 gem 'benchmark-ips', '~> 2.13', require: false
-gem 'mutant', '~> 0.13', require: false
-gem 'mutant-rspec', '~> 0.13', require: false
 gem 'rake', '~> 13.2'
 gem 'rantly', require: false
 gem 'rspec', '~> 3.13'
