@@ -57,10 +57,10 @@ flowchart TD
   CLI[Client/CLI] --> S[scan]
   S --> Q{catalog has code?}
   Q -- No --> U[unknown_sku]
-  Q -- Yes --> A[items[code] += 1]
+  Q -- Yes --> A[increment item count]
 
   CLI --> B[breakdown]
-  B --> ST[subtotal]
+  B --> ST[compute subtotal]
   ST --> ST1[sum price * qty]
 
   B --> D[compute discounts]
@@ -68,13 +68,13 @@ flowchart TD
   P --> R1[BOGO]
   P --> R2[Bulk]
   P --> R3[Group]
-  R1 --> L[discounts list]
+  R1 --> L[append discount]
   R2 --> L
   R3 --> L
 
-  L --> SUM[sum(discount_cents)]
-  ST1 --> ST_OUT[subtotal]
-  ST_OUT --> T[total = subtotal - sum]
+  L --> SUM[sum discount cents]
+  ST1 --> SUBT[out: subtotal]
+  SUBT --> T[total = subtotal - sum]
   T --> OUT[{subtotal, discounts, total}]
 ```
 
