@@ -1,8 +1,0 @@
-usage: opensource
-integration: rspec
-includes: [lib]
-requires: [mutant-rspec]
-matcher:
-  subjects:
-    - Money*
-    - Pricing*
