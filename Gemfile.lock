@@ -99,7 +99,8 @@ PLATFORMS
 
 DEPENDENCIES
   benchmark-ips (~> 2.13)
-  mutant-rspec
+  mutant (~> 0.13)
+  mutant-rspec (~> 0.13)
   rake (~> 13.2)
   rantly
   rspec (~> 3.13)
