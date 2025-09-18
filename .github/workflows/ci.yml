@@ -28,4 +28,4 @@ jobs:
           bundler-cache: false
       - run: bundle lock --add-platform x86_64-linux
       - run: bundle install --jobs 4 --retry 3
-      - run: bundle exec mutant run --usage opensource --require mutant-rspec --use rspec 'Money*' 'Pricing*'
+      - run: bundle exec mutant run --usage opensource --use rspec 'Money*' 'Pricing*'
