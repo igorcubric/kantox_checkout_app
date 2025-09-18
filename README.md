@@ -54,14 +54,14 @@ bin/checkout GR1 SR1 GR1 GR1 CF1
 ### Architecture (flow diagram)
 ```mermaid
 flowchart TD
-  CLI[Client/CLI] --> S[scan]
+  CLI[Client or CLI] --> S[scan]
   S --> Q{catalog has code?}
-  Q -- No --> U[unknown_sku]
+  Q -- No --> U[unknown_sku policy]
   Q -- Yes --> A[increment item count]
 
   CLI --> B[breakdown]
   B --> ST[compute subtotal]
-  ST --> ST1[sum price * qty]
+  ST --> ST1[sum price x qty]
 
   B --> D[compute discounts]
   D --> P[sort rules by priority]
@@ -73,9 +73,9 @@ flowchart TD
   R3 --> L
 
   L --> SUM[sum discount cents]
-  ST1 --> SUBT[out: subtotal]
-  SUBT --> T[total = subtotal - sum]
-  T --> OUT[{subtotal, discounts, total}]
+  ST1 --> SUBT[subtotal]
+  SUBT --> T[total = subtotal minus sum]
+  T --> OUT[return subtotal, discounts, total]
 ```
 
 #### ASCII fallback
