@@ -3,7 +3,7 @@
 require_relative 'product'
 require_relative 'money'
 
-# Catalog contains an unchangeable mapu code->product and an exists?/fetch API
+# Catalog contains an unchangeable map code -> product and an exists?/fetch API
 class Catalog
   def self.default
     new(

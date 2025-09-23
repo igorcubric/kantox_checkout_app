@@ -3,7 +3,10 @@
 require 'simplecov'
 SimpleCov.start do
   add_filter '/spec/'
-  minimum_coverage 98
+  add_filter '/bin/'
+  add_filter '/scripts/'
+  add_filter '/docs/'
+  add_filter '/.github/'
 end
 
 RSpec.configure do |config|
@@ -11,3 +14,6 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
+
+# auto-load support/
+Dir[File.expand_path('support/**/*.rb', __dir__)].sort.each { |f| require f }

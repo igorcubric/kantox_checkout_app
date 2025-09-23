@@ -1,4 +1,4 @@
-# ADR 0001: Pricing rules composition and rounding
+# ADR (Architecture Decision Record) 0001: Pricing rules composition and rounding
 
 - Money is in cents for accuracy
 - CF1 correctly applies 2/3 to group subtotal in order to avoid per-unit rounding drift

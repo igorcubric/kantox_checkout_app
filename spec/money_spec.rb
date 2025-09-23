@@ -3,7 +3,7 @@
 require_relative '../lib/money'
 
 RSpec.describe Money do
-  it 'adds and subtracts' do
+  it 'adds' do
     a = described_class.new(311)
     b = described_class.new(200)
 

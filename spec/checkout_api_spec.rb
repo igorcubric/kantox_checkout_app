@@ -4,50 +4,39 @@ require_relative '../lib/checkout'
 require_relative '../lib/catalog'
 
 RSpec.describe Checkout do
-  let(:catalog) { Catalog.default }
-  let(:rules) do
-    [
-      Pricing::BuyOneGetOneFree.new(code: 'GR1'),
-      Pricing::BulkPriceOverride.new(code: 'SR1', threshold: 3, new_unit_price_cents: 450),
-      Pricing::GroupPriceFraction.new(code: 'CF1', threshold: 3, numerator: 2, denominator: 3)
-    ]
-  end
-  let(:order_basket) { %w[CF1 CF1 CF1 GR1 SR1] }
-  let(:any_basket) { %w[GR1 SR1 GR1 GR1 CF1] }
-
-  def total_for(arr, rules:, catalog:)
-    co = described_class.new(pricing_rules: rules, catalog: catalog)
-    arr.each { |c| co.scan(c) }
-    co.total
-  end
-
-  def subtotal_for(basket)
-    basket.tally.sum(Money.zero) { |code, n| catalog.fetch(code).price * n }
-  end
+  include_context 'with catalog and rules'
 
   it 'matches subtotal when no rules are applied' do
     basket = %w[GR1 SR1 CF1]
     co = described_class.new(pricing_rules: [], catalog: catalog)
-    basket.each { |c| co.scan(c) }
-    expect(co.total).to eq(subtotal_for(basket))
+    scan_all(co, basket)
+    expect(co.total).to match_money(subtotal_for(catalog, basket))
   end
 
   it 'applies discounts when thresholds are met' do
     basket = %w[GR1 GR1 SR1 SR1 SR1 CF1 CF1 CF1]
     co = described_class.new(pricing_rules: rules, catalog: catalog)
-    basket.each { |c| co.scan(c) }
-    expect(co.total.cents).to be < subtotal_for(basket).cents
+    scan_all(co, basket)
+    expect(co.total.cents).to be < subtotal_for(catalog, basket).cents
   end
 
+  # rubocop:disable RSpec/ExampleLength
   it 'is order-invariant' do
-    expect(total_for(order_basket, rules:, catalog:))
-      .to eq(total_for(order_basket.shuffle, rules:, catalog:))
+    basket = %w[SR1 CF1 GR1 CF1 CF1]
+    a = described_class.new(pricing_rules: rules, catalog: catalog)
+    b = described_class.new(pricing_rules: rules, catalog: catalog)
+    scan_all(a, basket)
+    scan_all(b, basket.shuffle)
+    expect(a.total).to match_money(b.total)
   end
 
   it 'total equals subtotal minus sum(discounts) for any basket' do
+    basket = %w[GR1 GR1 SR1 SR1 SR1 CF1 CF1 CF1]
     co = described_class.new(pricing_rules: rules, catalog: catalog)
-    any_basket.each { |c| co.scan(c) }
+    scan_all(co, basket)
     bd = co.breakdown
-    expect(bd[:total].cents).to eq(bd[:subtotal].cents - bd[:discounts].sum { |d| d[:amount].cents })
+    sum_discounts = bd[:discounts].sum { |d| d[:amount].cents }
+    expect(bd[:total].cents).to eq(bd[:subtotal].cents - sum_discounts)
   end
+  # rubocop:enable RSpec/ExampleLength
 end

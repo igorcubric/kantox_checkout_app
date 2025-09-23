@@ -3,7 +3,7 @@
 require_relative 'rule'
 
 module Pricing
-  # BuyOneGetOneFree: every other unit is extra/free for the given SKU
+  # BuyOneGetOneFree: every other unit is extra/free for the given SKU (stock keeping unit)
   class BuyOneGetOneFree < Rule
     attr_reader :code
 
